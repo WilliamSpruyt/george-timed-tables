@@ -1,3 +1,7 @@
+/*
+I used this link from github to deploy to
+heroku create $APP_NAME --buildpack https://github.com/mars/create-react-app-buildpack.git*/
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
@@ -50,7 +54,7 @@ class Question extends React.Component {
           <AnswerBox
             focMe={this.props.focMe}
             id={this.props.id}
-            bigBrotherHandleChange={this.props.handleChange}
+            handleChange={this.props.handleChange}
             answer={this.props.x * this.props.y}
           />
         </td>
@@ -73,9 +77,9 @@ class AnswerBox extends React.Component {
         ? { value: event.target.value }
         : { ticked: true }
     );
-    this.props.bigBrotherHandleChange(
+    this.props.handleChange(
       this.id,
-      event.target.value === String(this.props.answer) ? 1 : 0
+      event.target.value === String(this.props.answer) ? true : false
     );
   }
 
@@ -162,27 +166,45 @@ class StartBox extends React.Component {
 
 class App extends React.Component {
   qlist = [];
-
   constructor(props) {
     super(props);
     this.state = {
       score: 0,
-      qstate: this.qlist,
+      qstate: [],
       started: false,
-      numQs: 10,
-      time: 1,
+      numQs: "",
+      time: "",
       messagePic: welcome,
       message: "Welcome"
     };
-    this.gameOver = this.gameOver.bind(this);
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSlide = this.handleSlide.bind(this);
   }
-  handleChange(id, plus) {
-    if (plus > 0) {
-      this.setState({ score: this.state.score + plus });
-      var pos = this.state.score + plus;
+  gameOver(mess, messPic) {
+    this.setState(
+      {
+        message: mess,
+        messagePic: messPic,
+        score: 0,
+        qstate: []
+      },
+      () => {
+        this.setState({ started: false });
+        console.log("score " + this.state.score);
+      }
+    );
+  }
+  handleChange(id, right) {
+    console.log(this.state.score);
+    if (right) {
+      if (this.state.score === this.state.numQs - 1) {
+        this.gameOver("Success", success);
+        return;
+      }
+      this.setState({ score: this.state.score + 1 });
+      var pos = this.state.score + 1;
       if (pos < this.state.numQs) {
         let qlist = this.state.qstate.slice(0);
         let newlyfocussedQ = (
@@ -202,17 +224,11 @@ class App extends React.Component {
       }
     }
   }
-  gameOver(mess, messPic) {
-    console.log("whar");
-    this.setState({
-      started: false,
-      message: mess,
-      messagePic: messPic,
-      score: 0
-    });
-  }
+
   handleSubmit() {
-    this.setState({ started: true });
+    this.qlist.length = 0;
+    console.log(this.state.numQs);
+
     for (var i = 0; i < this.state.numQs; i++) {
       var x = Math.floor(Math.random() * 5) + 7;
       var y = Math.floor(Math.random() * 12) + 1;
@@ -230,14 +246,15 @@ class App extends React.Component {
         />
       );
     }
+    this.setState({ qstate: this.qlist }, () => {
+      this.setState({ started: true });
+    });
   }
   handleSlide(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
   render() {
-    if (this.state.score === this.state.numQs)
-      this.gameOver("Success", success);
     if (!this.state.started) {
       return (
         <StartBox
