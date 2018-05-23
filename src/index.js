@@ -6,8 +6,24 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import { App } from "./app";
+import { Header } from "./header";
+import { BrowserRouter } from "react-router-dom";
 
 import registerServiceWorker from "./registerServiceWorker";
-
-ReactDOM.render(<App />, document.getElementById("root"));
+class George extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header />
+        <App />
+      </div>
+    );
+  }
+}
+ReactDOM.render(
+  <BrowserRouter>
+    <George />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
 registerServiceWorker();

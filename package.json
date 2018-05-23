@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.1.1",
+    "express": "^4.16.3",
+    "express-generator": "^4.16.0",
     "react": "^16.3.2",
     "react-countdown-clock": "^2.4.0",
     "react-dom": "^16.3.2",

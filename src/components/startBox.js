@@ -1,9 +1,7 @@
 import React from "react";
+import start from "../assets/images/startberniewithalph150px.png";
 
 export class StartBox extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div className="wrapper">
@@ -17,7 +15,8 @@ export class StartBox extends React.Component {
           alt={this.props.title}
         />
         <form>
-          Time<input
+          <input
+            placeholder="Time"
             name="time"
             type="number"
             value={this.props.timeValue}
@@ -26,8 +25,17 @@ export class StartBox extends React.Component {
             step="1"
             onChange={this.props.slideChange}
           />
-          Questions
+          <button type="submit" id="but" onClick={this.props.submitter}>
+            <img
+              id="butim"
+              src={start}
+              alt="bernie"
+              onClick={this.myfunction}
+            />
+          </button>
+
           <input
+            placeholder="Questions"
             name="numQs"
             type="number"
             value={this.props.qValue}
@@ -36,9 +44,12 @@ export class StartBox extends React.Component {
             step="5"
             onChange={this.props.slideChange}
           />
-          <button type="submit" id="but" onClick={this.props.submitter}>
-            START
-          </button>
+          <input
+            placeholder="Name"
+            name="playerName"
+            value={this.props.playerName}
+            onChange={this.props.slideChange}
+          />
         </form>
       </div>
     );
